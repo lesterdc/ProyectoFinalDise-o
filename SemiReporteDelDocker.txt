@@ -1,0 +1,32 @@
++Montaje de Docker en Debian/Ubuntu
+	-Nuestro grupo trabajo con dos maquinas de Linux, una de ellas Ubuntu 18.0.1 
+	 y Debian 9, los pasos para la instalacion del Docker en ambas son iguales y son
+	 los siguientes:
+		+sudo apt-get update
+		+sudo apt-get install apt-trasport-https ca-certificates curl gnupg-agent software-properties-common
+		#Una vez hecho esto debemos descargar y anadir la llave del repositorio
+		+curl -dsSl https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+		#En caso de no saber la arquitectura que tenemos 
+		+sudo uname -a
+		#En nuestro caso ambas tenian la misma arquitectura
+		+sudo add-apt-repository \
+   		 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+		  $(lsb_release -cs) stable"
+		+sudo apt-get update
+		+sudo apt-get install docker.ce docker-ce-cli containerd.io docker.io
+		
+	-Una vez que ya tenemos docker instalado en el caso de Debian hay que elevar el servicio
+		+sudo service docker start
+	-Ahora en adelante se explicara los comandos que fueron usados para poder crear el docker
+		-sudo docker login
+		-sudo docker pull mysql:latest
+		-sudo docker run --name Proyecto_diseño -e MYSQL_ROOT_PASSWORD=secret -p 8081:3306 -d mysql:latest
+		#La bandera --name es para dar un nombre al contenedor
+		#la bandera -e sirve para setear valores del sistema en este caso la contraseña de root
+		#la bandera -p es para que el contenedor trabaje en el puerto 8081 de nuestra maquina
+		#la bandera -d es para especificar que imagen se va a usar
+	-Ahora el contenedor esta creado pero no contiene nuestra base de datos, ni los datos que esta contiene
+		-sudo docker -i 'ID' mysql -u root -psecret < 'rutadelabase.sql'
+		-sudo docker -i 'ID' mysql -u root -psecret < 'rutadelosdatos.sql'
+		#la bandera -i nos sirve para poder ingresar la base de datos y luego los datos
+		#es bastante similar al proceso natural para subir una base en mysql por medio de consola en Linux
